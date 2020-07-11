@@ -1,6 +1,6 @@
 // Adapted from https://github.com/moses-smt/mosesdecoder/tree/master/contrib/c%2B%2Btokenizer
 
-#include "mosestokenizer/tokenizer.h"
+#include "mosestokenizer/Tokenizer.h"
 #include <re2/stringpiece.h>
 #include <sstream>
 #include <iterator>

@@ -5,7 +5,7 @@
 #include <pybind11/stl.h>
 
 #include "mosestokenizer/Parameters.h"
-#include "mosestokenizer/tokenizer.h"
+#include "mosestokenizer/Tokenizer.h"
 
 int add(int i, int j) {
     return i + j;
