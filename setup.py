@@ -136,7 +136,8 @@ setup(
     package_dir={'mosestokenizer': 'bindings/python/mosestokenizer'},
     package_data={'mosestokenizer': [
         'share/*/*',
-        'lib/*.so*'
+        'lib/*.so*',
+        'lib/*.dylib'
     ]},
     ext_modules=[CMakeExtension(
         'mosestokenizer.lib._mosestokenizer'
