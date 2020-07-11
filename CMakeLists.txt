@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.1)
 
 file(STRINGS "VERSION" MOSESTOKENIZER_VERSION)
 project(mosestokenizer VERSION ${SPM_VERSION} LANGUAGES CXX)
@@ -6,7 +6,7 @@ project(mosestokenizer VERSION ${SPM_VERSION} LANGUAGES CXX)
 ######## Options
 option(BUILD_SHARED_LIBS "Build mosestokenizer as shared library" ON)
 option(BUILD_CLI "Build mosestokenizer commandline tool" ON)
-option(BUILD_PYTHON "Build mosestokneizer python library" ON)
+option(BUILD_PYTHON "Build mosestokneizer python library" OFF)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -61,34 +61,36 @@ add_definitions(${RE2_CFLAGS_OTHER})
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 add_library(
-    mosestokenizer
+    mosestokenizer-dev
     src/tokenizer.cpp
     src/Parameters.cpp
 )
+set_target_properties(mosestokenizer-dev PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(mosestokenizer-dev PRIVATE
+    ${Boost_LIBRARIES}
+    ${GLIB_LIBRARIES}
+    ${RE2_LIBRARIES}
+)
+
+# TODO: Figure out how to link dependencies only to libmosestokenizer
+if (BUILD_CLI)
+add_executable(
+    mosestokenizer
+    src/tools/tokenizer_main.cpp
+)
 set_target_properties(mosestokenizer PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(mosestokenizer PRIVATE mosestokenizer-dev)
 target_link_libraries(mosestokenizer PRIVATE
     ${Boost_LIBRARIES}
     ${GLIB_LIBRARIES}
     ${RE2_LIBRARIES}
 )
 
-# TODO: Figure out how to link only to libmosestokenizer
-if (BUILD_CLI)
-    add_executable(
-        mosestokenizer_cli
-        src/tools/tokenizer_main.cpp
-    )
-    set_target_properties(mosestokenizer_cli PROPERTIES POSITION_INDEPENDENT_CODE ON)
-    target_link_libraries(mosestokenizer_cli PRIVATE mosestokenizer)
-    target_link_libraries(mosestokenizer_cli PRIVATE
-        ${Boost_LIBRARIES}
-        ${GLIB_LIBRARIES}
-        ${RE2_LIBRARIES}
-    )
 endif (BUILD_CLI)
 
-
+if (BUILD_PYTHON)
 add_subdirectory(deps/pybind11-2.5.0)
 pybind11_add_module(_mosestokenizer src/python/mosestokenizer.cpp)
 set_target_properties(_mosestokenizer PROPERTIES POSITION_INDEPENDENT_CODE ON)
-target_link_libraries(_mosestokenizer PRIVATE mosestokenizer)
+target_link_libraries(_mosestokenizer PRIVATE mosestokenizer-dev)
+endif (BUILD_PYTHON)
