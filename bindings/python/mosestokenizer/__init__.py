@@ -28,7 +28,6 @@ for _lib in [
 ]:
     _wildcard = os.path.join(_TOKENIZER_LIB_DIR, 'lib{}.so*').format(_lib)
     for _fp in glob(_wildcard):
-        print(_fp)
         cdll.LoadLibrary(_fp)
 
 try:
