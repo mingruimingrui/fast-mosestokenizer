@@ -1,4 +1,5 @@
 import os
+import platform
 from glob import glob
 from ctypes import cdll
 from typing import List
@@ -28,8 +29,12 @@ os.environ['TOKENIZER_SHARED_DIR'] = os.environ.get(
 
 # Manually load cached dynamic libraries before loading mosestokenizer
 for _lib in _REQUIRED_LIBS:
-    _wildcard = os.path.join(_TOKENIZER_LIB_DIR, 'lib{}.so*').format(_lib)
-    for _fp in glob(_wildcard):
+    if platform.system() == 'Darwin':
+        _wildcard = 'lib{}*.dylib'.format(_lib)
+    else:
+        _wildcard = 'lib{}.so*'.format(_lib)
+
+    for _fp in glob(os.path.join(_TOKENIZER_LIB_DIR, _wildcard)):
         try:
             cdll.LoadLibrary(_fp)
         except OSError:

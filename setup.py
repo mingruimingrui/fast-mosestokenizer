@@ -98,6 +98,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 
+# Copy dynamically linked libraries
 os.makedirs(os.path.join(TOKENIZER_DIR, 'lib'), exist_ok=True)
 for lib in [
     'glib-2.0',
@@ -110,8 +111,15 @@ for lib in [
     'boost_thread',
     'boost_program_options',
 ]:
-    for libpath in glob('/usr/lib/x86_64-linux-gnu/lib{}.so*'.format(lib)):
-        shutil.copy(libpath, TOKENIZER_LIB_DIR)
+    if platform.system() == 'Darwin':
+        libpaths = glob('/usr/local/lib/lib{}*.dylib'.format(lib))
+        if lib == 'stdc++':
+            libpaths = glob('/usr/lib/lib{}*.dylib'.format(lib))
+    else:
+        libpaths = glob('/usr/lib/x86_64-linux-gnu/lib{}.so*'.format(lib))
+
+    for fp in libpaths:
+        shutil.copy(fp, TOKENIZER_LIB_DIR)
 
 
 setup(
