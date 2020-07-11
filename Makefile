@@ -1,6 +1,8 @@
 .PHONY = help build clean
 
 help:
+	@echo "Subcommands"
+	@echo "==========="
 	@echo "- build"
 	@echo "	Build the mosestokenizer c library"
 	@echo "- clean"
@@ -12,20 +14,18 @@ help:
 
 build:
 	mkdir -p build/rel
-	cmake . \
-		--build ./build/rel \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DBUILD_SHARED_LIBS:BOOL=ON \
-		-DBUILD_CLI:BOOL=ON; \
-	cmake --build ./build/rel --config Release
-	# ( \
-	# 	cd build; \
-	# 	cmake . \
-	# 		-DCMAKE_BUILD_TYPE=Release \
-	# 		-DBUILD_SHARED_LIBS:BOOL=ON \
-	# 		-DBUILD_CLI:BOOL=ON; \
-	# 	make -j; \
-	# )
+	( \
+		cd build/rel; \
+		cmake ../.. \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DBUILD_SHARED_LIBS:BOOL=ON \
+			-DBUILD_CLI:BOOL=ON; \
+		cmake --build . --config Release; \
+	)
+
+install:
+	@echo "Not yet implemented"
+	exit 1
 
 clean:
 	rm -rf build
