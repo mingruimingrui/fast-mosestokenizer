@@ -123,7 +123,7 @@ for lib in [
 
 
 setup(
-    name='mosestokenizer',
+    name='fast-mosestokenizer',
     version=VERSION_INFO,
     author='Wang Ming Rui',
     author_email='mingruimingrui@hotmail.com',
