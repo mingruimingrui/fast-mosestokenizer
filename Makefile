@@ -30,8 +30,7 @@ install:
 	exit 1
 
 clean:
-	rm -rf build
-	rm -rf *.so bindings/python/mosestokenizer/lib
+	rm -rf build bindings/python/mosestokenizer/lib
 
 download-pybind11:
 	mkdir -p deps
