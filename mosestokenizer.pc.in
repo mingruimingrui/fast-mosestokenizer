@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@CMAKE_INSTALL_PREFIX@/lib
+includedir=@CMAKE_INSTALL_PREFIX@/include
+
+Name: mosestokenizer
+Description: Moses Tokenizer
+Version: @MOSESTOKENIZER_VERSION@
+Requires: stdc++ glib-2.0
+Libs: -L${libdir} -lmosestokenizer
+Cflags: -I${includedir}
