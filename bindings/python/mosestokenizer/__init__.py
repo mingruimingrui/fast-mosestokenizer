@@ -15,15 +15,26 @@ os.environ['TOKENIZER_SHARED_DIR'] = os.environ.get(
 )
 
 # Manually load cached dynamic libraries before loading mosestokenizer
-for _lib in ['stdc++', 'glib-2.0', 're2', 'boost_thread', 'mosestokenizer']:
-    _wildcard = os.path.join(_TOKENIZER_LIB_DIR, 'lib{}*.so*').format(_lib)
+for _lib in [
+    'stdc++',
+    're2',
+    'boost_atomic',
+    'boost_system',
+    'boost_date_time',
+    'boost_chrono',
+    'boost_thread',
+    'boost_program_options',
+    'mosestokenizer-dev',
+]:
+    _wildcard = os.path.join(_TOKENIZER_LIB_DIR, 'lib{}.so*').format(_lib)
     for _fp in glob(_wildcard):
+        print(_fp)
         cdll.LoadLibrary(_fp)
 
 try:
     from mosestokenizer.lib import _mosestokenizer
 except ImportError as e:
-    _msg = "Failed to import mosestokenizer c++ library" + \
+    _msg = "Failed to import mosestokenizer c++ library\n" + \
         "Full error log: {}".format(e.__repr__())
     raise RuntimeError(_msg)
 
