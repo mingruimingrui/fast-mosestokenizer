@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -10,26 +13,14 @@ int add(int i, int j) {
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(mosestokenizer_clib, m) {
-    // m.doc() = R"pbdoc(
-    //     Pybind11 example plugin
-    //     -----------------------
-    //     .. currentmodule:: mosestokenizer_clib
-    //     .. autosummary::
-    //        :toctree: _generate
-    //        add
-    //        subtract
-    // )pbdoc";
-
-    // m.def("add", &add, R"pbdoc(
-    //     Add two numbers
-    //     Some other explanation about the add function.
-    // )pbdoc");
-
-    // m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
-    //     Subtract two numbers
-    //     Some other explanation about the subtract function.
-    // )pbdoc");
+PYBIND11_MODULE(_mosestokenizer, m) {
+    m.doc() = R"pbdoc(
+        Pybind11 mosestokenizer plugin
+        ------------------------------
+        .. currentmodule:: _mosestokenizer
+        .. autoclass:: MosesTokenizerParameters
+        .. autoclass:: MosesTokenizer
+    )pbdoc";
 
     py::class_<Parameters>(m, "MosesTokenizerParameters")
         .def(py::init<>())
@@ -61,8 +52,23 @@ PYBIND11_MODULE(mosestokenizer_clib, m) {
 
     py::class_<Tokenizer>(m, "MosesTokenizer")
         .def(py::init<const Parameters&>())
-        .def("init", &Tokenizer::init)
-        .def("tokens", &Tokenizer::tokens);
+        .def("init", &Tokenizer::init, "Reinitialize tokenizer shared dir.")
+        .def("tokenize", &Tokenizer::tokens, "Tokenize sentence.")
+        .def(
+            "detokenize",
+            (std::string (Tokenizer::*)(
+                const std::vector<std::string>&
+            )) &Tokenizer::detokenize,
+            "Detokenize into sentence."
+        )
+        .def(
+            "split",
+            (std::vector<std::string> (Tokenizer::*)(
+                const std::string &,
+                bool *continuation_p
+            )) &Tokenizer::splitter,
+            "Split a paragraph into multiple sentences."
+        );
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;
