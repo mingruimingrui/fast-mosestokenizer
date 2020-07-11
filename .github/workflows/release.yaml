@@ -58,3 +58,9 @@ jobs:
 
     - name: Build python wheel
       run: python3 setup.py build_ext bdist_wheel
+
+    - name: Save wheel as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: mosestokenizer-${{ matrix.python-version }}-macos
+        path: dist/
