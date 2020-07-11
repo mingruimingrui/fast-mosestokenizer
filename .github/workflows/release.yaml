@@ -1,4 +1,4 @@
-name: Build documentations
+name: Build and upload release files
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
+        python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
 
     - name: Build python wheel
-      run: python setup.py build_ext bdist_wheel
+      run: python3 setup.py build_ext bdist_wheel
 
     - name: Save wheel as artifact
       uses: actions/upload-artifact@v1
