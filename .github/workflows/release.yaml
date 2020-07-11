@@ -35,6 +35,7 @@ jobs:
     - name: Save wheel as artifact
       uses: actions/upload-artifact@v1
       with:
+        name: mosestokenizer-${{ matrix.python-version }}-linux
         path: dist/
 
   build-macos:
