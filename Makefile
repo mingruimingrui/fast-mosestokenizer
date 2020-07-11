@@ -39,7 +39,7 @@ download-pybind11:
 
 apt-install-deps:
 	apt update
-	apt install -y \
+	DEBIAN_FRONTEND=noninteractive apt install -y \
 		g++ cmake \
 		libboost-thread-dev \
 		libboost-program-options-dev \
