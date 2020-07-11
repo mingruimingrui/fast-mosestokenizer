@@ -35,5 +35,25 @@ jobs:
     - name: Save wheel as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: mosestokenizer_whl
         path: dist/
+
+  build:
+    runs-on: macos-10.15
+    strategy:
+      matrix:
+        python-version: [3.8]
+        # python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        make brew-install-deps
+        make download-pybind11
+        python3 -m pip install setuptools wheel twine
+      env:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Build python wheel
+      run: python3 setup.py build_ext bdist_wheel

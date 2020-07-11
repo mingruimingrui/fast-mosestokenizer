@@ -10,7 +10,9 @@ help:
 	@echo "- download-pybind11"
 	@echo "	Download and decompress pybind11"
 	@echo "- apt-install-deps"
-	@echo "	Use APT to install dependencies (convenience during CI/CD)"
+	@echo "	Use APT to install dependencies (for convenience during CI/CD)"
+	@echo "- brew-install-deps"
+	@echo "	Use Homebrew to install dependencies (for convenience during CI/CD)"
 
 build:
 	mkdir -p build/rel
@@ -40,8 +42,10 @@ download-pybind11:
 apt-install-deps:
 	apt update
 	DEBIAN_FRONTEND=noninteractive apt install -y \
-		g++ cmake \
 		libboost-thread-dev \
 		libboost-program-options-dev \
 		libglib2.0-dev \
 		libre2-dev
+
+brew-install-deps:
+	brew install pkg-config boost glib re2
