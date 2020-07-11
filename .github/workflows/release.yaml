@@ -1,0 +1,36 @@
+name: Build documentations
+
+on:
+  push:
+    branches:
+      - master
+  create:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y make
+        sudo make apt-install-deps
+      env:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Build python wheel
+      run: python setup.py build_ext bdist_wheel
+
+    - name: Save wheel as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: mosestokenizer_whl
+        path: dist/*.whl
