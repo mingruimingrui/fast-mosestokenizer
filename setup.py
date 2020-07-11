@@ -100,6 +100,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 os.makedirs(os.path.join(TOKENIZER_DIR, 'lib'), exist_ok=True)
 for lib in [
+    'glib-2.0',
     'stdc++',
     're2',
     'boost_atomic',

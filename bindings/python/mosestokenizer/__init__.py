@@ -7,15 +7,8 @@ __all__ = ['MosesTokenizer']
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _TOKENIZER_LIB_DIR = os.path.join(_THIS_DIR, 'lib')
-
-# Set default TOKENIZER_SHARED_DIR if not set
-os.environ['TOKENIZER_SHARED_DIR'] = os.environ.get(
-    'TOKENIZER_SHARED_DIR',
-    os.path.join(_THIS_DIR, 'share')
-)
-
-# Manually load cached dynamic libraries before loading mosestokenizer
-for _lib in [
+_REQUIRED_LIBS = [
+    'glib-2.0',
     'stdc++',
     're2',
     'boost_atomic',
@@ -25,10 +18,24 @@ for _lib in [
     'boost_thread',
     'boost_program_options',
     'mosestokenizer-dev',
-]:
+]
+
+# Set default TOKENIZER_SHARED_DIR if not set
+os.environ['TOKENIZER_SHARED_DIR'] = os.environ.get(
+    'TOKENIZER_SHARED_DIR',
+    os.path.join(_THIS_DIR, 'share')
+)
+
+# Manually load cached dynamic libraries before loading mosestokenizer
+for _lib in _REQUIRED_LIBS:
     _wildcard = os.path.join(_TOKENIZER_LIB_DIR, 'lib{}.so*').format(_lib)
     for _fp in glob(_wildcard):
-        cdll.LoadLibrary(_fp)
+        try:
+            cdll.LoadLibrary(_fp)
+        except OSError:
+            # Random note: ubuntu-16.04 won't be able to import glib-2.0
+            # but it's okay
+            pass
 
 try:
     from mosestokenizer.lib import _mosestokenizer
