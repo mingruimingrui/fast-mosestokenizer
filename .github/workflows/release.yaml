@@ -36,4 +36,4 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: mosestokenizer_whl
-        path: dist/*.whl
+        path: dist/
