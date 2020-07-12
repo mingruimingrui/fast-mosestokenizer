@@ -1,7 +1,6 @@
 # Install
 
-This page contains a general guide on compiling and building the package
-from source.
+This is a guide for compiling and building the package from source.
 
 ## Requirements
 
@@ -21,14 +20,22 @@ from source.
 
 ## Installation (Library and command-line tool)
 
-Coming soon.
+```sh
+# Script to build the CLI is provided in the Makefile
+make build-cli
+
+# Installation comming soon
+```
 
 ## Installation (Python)
 
-Pybind11 is used to create a python interface.
-The `Makefile` contains a script to download and to decompress a release of
-Pybind11.
-Installation can be done using the `setup.py` script.
+### From PyPI (Recommended for users)
+
+```sh
+pip install fast-mosestokenizer
+```
+
+### From source
 
 ```sh
 # Download and decompress pybind11
