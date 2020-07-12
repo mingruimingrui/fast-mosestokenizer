@@ -1,6 +1,9 @@
 name: Build and upload python packages
 
 on:
+  push:
+    branches:
+      - master
   create:
     tags:
       - v*
@@ -11,21 +14,19 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-20.04', 'macos-10.15']
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.8]
+        # python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install dependencies
+    - name: Install dependencies (Linux)
       if: matrix.os == 'ubuntu-20.04'
-      run: |
-        sudo apt update
-        sudo apt install -y make
-        sudo make apt-install-deps
+      run: sudo make apt-install-deps
       env:
         DEBIAN_FRONTEND: noninteractive
 
-    - name: Install dependencies
+    - name: Install dependencies (OSX)
       if: matrix.os == 'macos-10.15'
       run: make brew-install-deps
 
@@ -34,6 +35,8 @@ jobs:
         make download-pybind11
         python3 -m pip install setuptools wheel twine
         python3 setup.py build_ext bdist_wheel
+      env:
+        CXX: clang++
 
     - name: Save wheel as artifact
       uses: actions/upload-artifact@v1
