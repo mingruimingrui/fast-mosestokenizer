@@ -60,6 +60,8 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
         escape_xml: bool = False,
         unescape_xml: bool = False,
         refined_punct_splits: bool = False,
+        url_handling: bool = True,
+        lowercase: bool = False,
         penn: bool = False,
     ):
         params = _mosestokenizer.MosesTokenizerParameters()
@@ -75,21 +77,17 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
         params.escape_p = escape_xml
         params.aggro_p = aggressive_dash_splits
         params.supersub_p
-        params.url_p
-        params.downcase_p
-        params.normalize_p  # Dummy variable
+        params.url_p = url_handling
+        params.downcase_p = lowercase
         params.penn_p = penn
-        params.words_p  # Appears to be cli only variable
-        params.denumber_p  # Dummy variable
-        params.narrow_latin_p
-        params.narrow_kana_p
         params.refined_p = refined_punct_splits
         params.unescape_p = unescape_xml
         params.drop_bad_p
-        params.split_p
-        params.notokenization_p
-        params.para_marks_p
-        params.split_breaks_p
+
+        params.normalize_p  # Not used
+        params.denumber_p  # Not used
+        params.narrow_latin_p  # Not used
+        params.narrow_kana_p  # Not used
 
         params.nthreads = 1
         params.chunksize = 1
