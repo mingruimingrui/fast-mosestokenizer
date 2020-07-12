@@ -32,16 +32,16 @@ jobs:
     - name: Build python wheel (Linux)
       run: |
         make download-pybind11
-        python3 -m pip install setuptools wheel twine
-        python3 setup.py build_ext bdist_wheel
+        python -m pip install setuptools wheel twine
+        python setup.py build_ext bdist_wheel
       env:
         CXX: clang++
 
     - name: Build python wheel (OSX)
       run: |
         make download-pybind11
-        python3 -m pip install setuptools wheel twine
-        python3 setup.py build_ext bdist_wheel --plat-name manylinux1_x64_64
+        python -m pip install setuptools wheel twine
+        python setup.py build_ext bdist_wheel --plat-name manylinux1_x64_64
       env:
         CXX: clang++
 
@@ -52,7 +52,7 @@ jobs:
         path: dist/
 
     # - name: Upload to PyPI
-    #   run: python3 -m twine upload dist/*
+    #   run: python -m twine upload dist/*
     #   env:
     #     TWINE_USERNAME: __token__
     #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
