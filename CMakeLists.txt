@@ -85,7 +85,6 @@ target_link_libraries(mosestokenizer PRIVATE
     ${GLIB_LIBRARIES}
     ${RE2_LIBRARIES}
 )
-
 endif (BUILD_CLI)
 
 if (BUILD_PYTHON)
