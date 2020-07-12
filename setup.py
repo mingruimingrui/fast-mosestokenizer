@@ -119,7 +119,11 @@ for lib in [
         libpaths = glob('/usr/lib/x86_64-linux-gnu/lib{}.so*'.format(lib))
 
     for fp in libpaths:
-        shutil.copy(fp, TOKENIZER_LIB_DIR)
+        fn = os.path.basename(fp)
+        dst_path = os.path.join(TOKENIZER_LIB_DIR, fn)
+        if os.path.isfile(dst_path):
+            os.remove(dst_path)
+        shutil.copy(fp, dst_path)
 
 
 setup(
