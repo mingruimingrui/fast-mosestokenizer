@@ -1,10 +1,13 @@
+LANG=en
 DATA_DIR=data
 TOOLS_DIR=tools
 OUTPUT_DIR=out
 
-IWSLT_EN_ZH_ROOT=${DATA_DIR}/en-zh
-IWSLT_EN_FILE=${IWSLT_EN_ZH_ROOT}/train.tags.en-zh.en
-IWSLT_EN_FILE=${IWSLT_EN_ZH_ROOT}/train.tags.en-zh.zh
+N=10000
+
+IWSLT_ROOT=${DATA_DIR}/en-zh
+IWSLT_PREFIX=train.tags.en-zh
+IWSLT_FILE=${IWSLT_ROOT}/${IWSLT_PREFIX}.${LANG}
 
 MOSESDECODER_ROOT=${TOOLS_DIR}/mosesdecoder
 MOSESDECODER_TOKENIZER=${MOSESDECODER_ROOT}/scripts/tokenizer/tokenizer.perl
@@ -35,34 +38,34 @@ download:
 bench-tokenizer-perl:
 	@echo "Running benchmark for tokenizer-perl"
 	@mkdir -p ${OUTPUT_DIR}
-	@cat ${IWSLT_EN_FILE} \
-		| time ${MOSESDECODER_TOKENIZER} -a -x -l en \
+	@head -n ${N} ${IWSLT_FILE} \
+		| time ${MOSESDECODER_TOKENIZER} -q -a -no-escape -l ${LANG} \
 		| ${LINE_COUNTER} \
-		> ${OUTPUT_DIR}/bench-tokenizer-perl.out
+		> ${OUTPUT_DIR}/bench-tokenizer-perl.${LANG}.out
 
 bench-sacremoses:
 	@echo "Running benchmark for sacremoses"
 	@mkdir -p ${OUTPUT_DIR}
-	@cat ${IWSLT_EN_FILE} \
-		| time ${SACREMOSES_TOKENIZER} -a -x -l en \
+	@head -n ${N} ${IWSLT_FILE} \
+		| time ${SACREMOSES_TOKENIZER} -a -x -l ${LANG} \
 		| ${LINE_COUNTER} \
-		> ${OUTPUT_DIR}/bench-sacremoses.out
+		> ${OUTPUT_DIR}/bench-sacremoses.${LANG}.out
 
 bench-fast-tokenizer-py:
 	@echo "Running benchmark for fast-tokenizer-py"
 	@mkdir -p ${OUTPUT_DIR}
-	@cat ${IWSLT_EN_FILE} \
-		| time ${FAST_MOSESTOKENIZER_PY} -a -x -l en \
+	@head -n ${N} ${IWSLT_FILE} \
+		| time ${FAST_MOSESTOKENIZER_PY} -a -x -l ${LANG} \
 		| ${LINE_COUNTER} \
-		> ${OUTPUT_DIR}/bench-fast-tokenizer-py.out
+		> ${OUTPUT_DIR}/bench-fast-tokenizer-py.${LANG}.out
 
 bench-fast-tokenizer:
 	@echo "Running benchmark for fast-tokenizer"
 	@mkdir -p ${OUTPUT_DIR}
-	@cat ${IWSLT_EN_FILE} \
-		| time ${FAST_MOSESTOKENIZER} -a -x -l en \
+	@head -n ${N} ${IWSLT_FILE} \
+		| time ${FAST_MOSESTOKENIZER} -a -x -l ${LANG} \
 		| ${LINE_COUNTER} \
-		> ${OUTPUT_DIR}/bench-fast-tokenizer.out
+		> ${OUTPUT_DIR}/bench-fast-tokenizer.${LANG}.out
 
 bench-all: \
 	bench-tokenizer-perl \
