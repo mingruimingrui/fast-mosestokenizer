@@ -1,4 +1,3 @@
-import distutils
 import os
 import platform
 import re
@@ -10,27 +9,6 @@ from glob import glob
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
-from wheel.bdist_wheel import bdist_wheel
-from wheel.pep425tags import calculate_macosx_platform_tag, get_impl_ver
-
-
-def get_platform(archive_root):
-    """Platform name based on pep425 and pep513 for linux
-    https://packaging.python.org/specifications/platform-compatibility-tags/
-    """
-    # XXX remove distutils dependency
-    result = distutils.util.get_platform()
-    if result.startswith("macosx") and archive_root is not None:
-        result = calculate_macosx_platform_tag(archive_root, result)
-
-    result = result.replace('.', '_').replace('-', '_')
-    if result == "linux_x86_64":
-        if sys.maxsize == 2147483647:
-            result = "manylinux1_i686"
-        else:
-            result = "manylinux1_x86_64"
-
-    return result
 
 
 class CMakeExtension(Extension):
@@ -108,50 +86,6 @@ class CMakeBuild(build_ext):
         subprocess.check_call(build_args, cwd=self.build_temp)
 
 
-class CustomBdistWheel(bdist_wheel):
-
-    user_options = [
-        ('bdist-dir=', 'b',
-            "temporary directory for creating the distribution"),
-        ('plat-name=', 'p',
-            "platform name to embed in generated filenames "
-            "(default: %s)" % get_platform(None)),
-        ('keep-temp', 'k',
-            "keep the pseudo-installation tree around after " +
-            "creating the distribution archive"),
-        ('dist-dir=', 'd',
-            "directory to put final built distributions in"),
-        ('skip-build', None,
-            "skip rebuilding everything (for testing/debugging)"),
-        ('relative', None,
-            "build the archive using relative paths "
-            "(default: false)"),
-        ('owner=', 'u',
-            "Owner name used when creating a tar file"
-            " [default: current user]"),
-        ('group=', 'g',
-            "Group name used when creating a tar file"
-            " [default: current group]"),
-        ('universal', None,
-            "make a universal wheel"
-            " (default: false)"),
-        ('compression=', None,
-            "zipfile compression (one of: {})"
-            " (default: 'deflated')"
-            .format(', '.join(bdist_wheel.supported_compressions))),
-        ('python-tag=', None,
-            "Python implementation compatibility tag"
-            " (default: py%s)" % get_impl_ver()[0]),
-        ('build-number=', None,
-            "Build number for this particular version. "
-            "As specified in PEP-0427, this must start with a digit. "
-            "[default: None]"),
-        ('py-limited-api=', None,
-            "Python tag (cp32|cp33|cpNN) for abi3 wheel tag"
-            " (default: false)"),
-    ]
-
-
 TOKENIZER_DIR = os.path.join('bindings', 'python', 'mosestokenizer')
 TOKENIZER_LIB_DIR = os.path.join(TOKENIZER_DIR, 'lib')
 
@@ -213,9 +147,6 @@ setup(
         'mosestokenizer.lib._mosestokenizer'
     )],
 
-    cmdclass=dict(
-        build_ext=CMakeBuild,
-        bdist_wheel=CustomBdistWheel
-    ),
+    cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
 )
