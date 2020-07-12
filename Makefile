@@ -14,7 +14,7 @@ help:
 	@echo "- brew-install-deps"
 	@echo "	Use Homebrew to install dependencies (for convenience during CI/CD)"
 
-build:
+build-cli:
 	mkdir -p build/rel
 	( \
 		cd build/rel; \
@@ -30,6 +30,7 @@ install:
 	exit 1
 
 clean:
+	pip uninstall -y fast-mosestokenizer
 	rm -rf build bindings/python/mosestokenizer/lib
 
 download-pybind11:
