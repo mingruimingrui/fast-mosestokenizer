@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 file(STRINGS "VERSION" MOSESTOKENIZER_VERSION)
-project(mosestokenizer VERSION ${SPM_VERSION} LANGUAGES CXX)
+project(mosestokenizer VERSION ${MOSESTOKENIZER_VERSION} LANGUAGES CXX)
 
 ######## Options
 option(BUILD_SHARED_LIBS "Build mosestokenizer as shared library" ON)
