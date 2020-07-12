@@ -41,7 +41,7 @@ jobs:
       run: |
         make download-pybind11
         python3 -m pip install setuptools wheel twine
-        python3 setup.py build_ext bdist_wheel --
+        python3 setup.py build_ext bdist_wheel --plat-name manylinux1_x64_64
       env:
         CXX: clang++
 
