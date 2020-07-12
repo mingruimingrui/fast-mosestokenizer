@@ -1,9 +1,6 @@
 name: Build and upload python packages
 
 on:
-  push:
-    branch:
-      - master
   create:
     tags:
       - v*
@@ -52,14 +49,8 @@ jobs:
       env:
         CXX: clang++
 
-    - name: Save wheel as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: mosestokenizer-${{matrix.python-version}}-${{matrix.os}}
-        path: dist/
-
-    # - name: Upload to PyPI
-    #   run: python -m twine upload dist/*
-    #   env:
-    #     TWINE_USERNAME: __token__
-    #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+    - name: Upload to PyPI
+      run: python -m twine upload dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
