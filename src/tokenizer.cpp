@@ -909,9 +909,10 @@ Tokenizer::penn_tokenize(const std::string& buf)
     if (escape_p)
         escape(ntext);
 
+    return ntext;
     // strip out wrapping spaces from line in result string
-    outs.assign(ntext.substr(1,ntext.size()-2));
-    return outs;
+    // outs.assign(ntext.substr(1,ntext.size()-2));
+    // return outs;
 }
 
 
