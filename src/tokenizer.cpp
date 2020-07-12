@@ -450,6 +450,7 @@ Tokenizer::Tokenizer(const Parameters& _)
     , lang_iso(_.lang_iso)
     , english_p(_.lang_iso.compare("en")==0)
     , latin_p((!english_p) && (_.lang_iso.compare("fr")==0 || _.lang_iso.compare("it")==0))
+    , swedish_p(_.lang_iso.compare("fi")==0 || _.lang_iso.compare("sv")==0)
     , skip_xml_p(_.detag_p)
     , skip_alltags_p(_.alltag_p)
     , entities_p(_.entities_p)
@@ -1048,35 +1049,39 @@ Tokenizer::quik_tokenize(const std::string& buf)
             in_num_p = true;
             break;
         case G_UNICODE_CONNECT_PUNCTUATION:
-            if (curr_uch != gunichar(L'_')) {
-                if (in_url_p) {
-                    in_url_p = false;
-                    post_break_p = pre_break_p = true;
-                }
-            }
-            if (in_num_p) {
-                post_break_p = pre_break_p = true;
-            } else {
-                switch (next_type) {
-                case G_UNICODE_LOWERCASE_LETTER:
-                case G_UNICODE_MODIFIER_LETTER:
-                case G_UNICODE_OTHER_LETTER:
-                case G_UNICODE_TITLECASE_LETTER:
-                    break;
-                default:
-                    post_break_p = pre_break_p = true;
-                }
-                switch (prev_type) {
-                case G_UNICODE_LOWERCASE_LETTER:
-                case G_UNICODE_MODIFIER_LETTER:
-                case G_UNICODE_OTHER_LETTER:
-                case G_UNICODE_TITLECASE_LETTER:
-                    break;
-                default:
-                    post_break_p = pre_break_p = true;
-                }
-            }
+            post_break_p = pre_break_p = true;
             break;
+            // Random note: Why? because connectors do not contain useful
+            // linguistic information
+            // if (curr_uch != gunichar(L'_')) {
+            //     if (in_url_p) {
+            //         in_url_p = false;
+            //         post_break_p = pre_break_p = true;
+            //     }
+            // }
+            // if (in_num_p) {
+            //     post_break_p = pre_break_p = true;
+            // } else {
+            //     switch (next_type) {
+            //     case G_UNICODE_LOWERCASE_LETTER:
+            //     case G_UNICODE_MODIFIER_LETTER:
+            //     case G_UNICODE_OTHER_LETTER:
+            //     case G_UNICODE_TITLECASE_LETTER:
+            //         break;
+            //     default:
+            //         post_break_p = pre_break_p = true;
+            //     }
+            //     switch (prev_type) {
+            //     case G_UNICODE_LOWERCASE_LETTER:
+            //     case G_UNICODE_MODIFIER_LETTER:
+            //     case G_UNICODE_OTHER_LETTER:
+            //     case G_UNICODE_TITLECASE_LETTER:
+            //         break;
+            //     default:
+            //         post_break_p = pre_break_p = true;
+            //     }
+            // }
+            // break;
         case G_UNICODE_FORMAT:
             in_url_p = in_num_p = false;
             break;
@@ -1161,6 +1166,10 @@ Tokenizer::quik_tokenize(const std::string& buf)
         case G_UNICODE_OTHER_PUNCTUATION:
             switch (curr_uch) {
             case gunichar(L':'):
+                if (swedish_p && next_type == G_UNICODE_LOWERCASE_LETTER) {
+                    post_break_p = pre_break_p = false;
+                    break;
+                };
             case gunichar(L'/'):
                 if (refined_p && !in_url_p
                     && prev_type == G_UNICODE_DECIMAL_NUMBER

@@ -67,6 +67,7 @@ protected:
     std::string lang_iso;
     bool english_p; // is lang_iso "en"
     bool latin_p; // is lang_iso "fr" or "it"
+    bool swedish_p; // is lang_iso "fi" or "sv"
     bool skip_xml_p;
     bool skip_alltags_p;
     bool entities_p;
