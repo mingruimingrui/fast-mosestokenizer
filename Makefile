@@ -30,7 +30,6 @@ install:
 	exit 1
 
 clean:
-	pip uninstall -y fast-mosestokenizer
 	rm -rf build bindings/python/mosestokenizer/lib
 
 download-pybind11:
