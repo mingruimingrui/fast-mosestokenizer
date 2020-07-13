@@ -3,25 +3,33 @@ cmake_minimum_required(VERSION 3.1)
 file(STRINGS "VERSION" MOSESTOKENIZER_VERSION)
 project(mosestokenizer VERSION ${MOSESTOKENIZER_VERSION} LANGUAGES CXX)
 
+
 ######## Options
 option(BUILD_SHARED_LIBS "Build mosestokenizer as shared library" ON)
 option(BUILD_CLI "Build mosestokenizer commandline tool" ON)
 option(BUILD_PYTHON "Build mosestokneizer python library" OFF)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-######## Compiler flags
+######## CMake settings
 add_definitions(
     -DVERSION_INFO="${MOSESTOKENIZER_VERSION}"
 )
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(CMAKE_MACOSX_RPATH 1)
+endif()
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 if (NOT BUILD_SHARED_LIBS)
-    add_definitions(-static -fPIC)
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     SET(CMAKE_EXE_LINKER_FLAGS "-static")
 endif (NOT BUILD_SHARED_LIBS)
 
+
+######## Compiler flags
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     add_definitions(-std=c++11 -Wall)
     if (CMAKE_BUILD_TYPE MATCHES Debug)
@@ -56,6 +64,9 @@ include_directories(${RE2_INCLUDE_DIRS})
 link_directories(${RE2_LIBRARY_DIRS})
 add_definitions(${RE2_CFLAGS_OTHER})
 
+# Random note: pkg-config is not properly configured to do static linking
+# Consider changing to using .cmake files
+
 
 ######## Linking
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -65,20 +76,20 @@ add_library(
     src/tokenizer.cpp
     src/Parameters.cpp
 )
-set_target_properties(mosestokenizer-dev PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(mosestokenizer-dev PRIVATE
     ${Boost_LIBRARIES}
     ${GLIB_LIBRARIES}
     ${RE2_LIBRARIES}
 )
 
+
+######## CLI
 # TODO: Figure out how to link dependencies only to libmosestokenizer
 if (BUILD_CLI)
 add_executable(
     mosestokenizer
     src/tools/tokenizer_main.cpp
 )
-set_target_properties(mosestokenizer PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(mosestokenizer PRIVATE mosestokenizer-dev)
 target_link_libraries(mosestokenizer PRIVATE
     ${Boost_LIBRARIES}
@@ -87,9 +98,10 @@ target_link_libraries(mosestokenizer PRIVATE
 )
 endif (BUILD_CLI)
 
+
+######## Python
 if (BUILD_PYTHON)
 add_subdirectory(deps/pybind11-2.5.0)
 pybind11_add_module(_mosestokenizer src/python/mosestokenizer.cpp)
-set_target_properties(_mosestokenizer PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(_mosestokenizer PRIVATE mosestokenizer-dev)
 endif (BUILD_PYTHON)
