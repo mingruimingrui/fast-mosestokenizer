@@ -1,0 +1,48 @@
+name: Build and upload python packages
+
+on:
+  create:
+    tags:
+      - v*
+    push:
+      - feature/*
+
+jobs:
+  release-pypi:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['ubuntu-20.04', 'macos-10.15']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and build dependencies
+      run: |
+        conda create -n meson python=3.8
+        conda install -y meson
+        make download-build-static-deps
+
+    # - name: Build python wheel (Linux)
+    #   if: matrix.os == 'ubuntu-20.04'
+    #   run: |
+    #     python -m pip install setuptools wheel twine
+    #     python setup.py build_ext bdist_wheel --plat-name manylinux1_x86_64
+    #   env:
+    #     CC: clang
+    #     CXX: clang++
+
+    # - name: Build python wheel (OSX)
+    #   if: matrix.os == 'macos-10.15'
+    #   run: |
+    #     python -m pip install setuptools wheel twine
+    #     python setup.py build_ext bdist_wheel
+    #   env:
+    #     CC: clang
+    #     CXX: clang++
+
+    # - name: Upload to PyPI
+    #   run: python -m twine upload dist/*
+    #   env:
+    #     TWINE_USERNAME: __token__
+    #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
