@@ -18,20 +18,20 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Download and install miniconda (OSX)
-      if: matrix.os == 'macos-10.15'
-      shell: bash
+    - name: Download and install miniconda
       run: |
-        MINICONDA_FILENAME=Miniconda3-latest-MacOSX-x86_64.sh
+        if [[ "${{ matrix.os }}" = "ubuntu-16.04" ]]; then
+          MINICONDA_FILENAME=Miniconda3-latest-Linux-x86_64.sh
+        elif [[ "${{ matrix.os }}" = "macos-10.15" ]]; then
+          MINICONDA_FILENAME=Miniconda3-latest-MacOSX-x86_64.sh
+        fi
         curl -L -o $MINICONDA_FILENAME "https://repo.continuum.io/miniconda/$MINICONDA_FILENAME"
         bash ${MINICONDA_FILENAME} -b -f -p $HOME/miniconda3
-        echo "::add-path::$HOME/miniconda3/bin"
-        echo "::add-path::$HOME/miniconda3/Scripts"
         conda init
 
-    - name: Init conda environment (Linux)
-      if: matrix.os == 'ubuntu-16.04'
-      run: conda init
+    # - name: Init conda environment (Linux)
+    #   if: matrix.os == 'ubuntu-16.04'
+    #   run: conda init
 
     - name: Download and build dependencies
       run: |
@@ -44,7 +44,7 @@ jobs:
         CC: clang
         CXX: clang++
 
-    - name: Build and upload packages
+    - name: Build packages
       run: |
         if [ ${{matrix.os}} == 'ubuntu-20.04' ]; then
           EXTRA_BDIST_ARGS="--plat-name manylinux1_x86_64"
