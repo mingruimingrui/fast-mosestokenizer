@@ -21,6 +21,7 @@ jobs:
 
     - name: Download and build dependencies
       run: |
+        conda config --add pkgs_dirs $HOME/.conda/pkgs
         conda create -n meson python=3.8
         conda install -y meson
         make download-build-static-deps
