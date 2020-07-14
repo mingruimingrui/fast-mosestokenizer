@@ -37,10 +37,10 @@ jobs:
     - name: Download and build dependencies
       run: |
         conda create -n meson python=3.8
-        conda activate meson
+        activate meson
         conda install -y meson
         make download-build-static-deps
-        conda deactivate
+        deactivate
       env:
         CC: clang
         CXX: clang++
@@ -52,9 +52,9 @@ jobs:
         fi
         for VERSION in 3.6; do
           conda create -n py$VERSION python=$VERSION
-          conda activate py$VERSION
+          activate py$VERSION
           python setup.py build_ext bdist_wheel $EXTRA_BDIST_ARGS
-          conda deactivate
+          deactivate
         done
       env:
         CC: clang
