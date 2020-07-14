@@ -35,7 +35,7 @@ jobs:
 
     - name: Download and build dependencies
       run: |
-        source ~/.bashrc && true
+        source $HOME/.bashrc && true
         conda create -n meson python=3.8
         conda activate meson
         conda install -y meson
@@ -47,6 +47,7 @@ jobs:
 
     - name: Build and upload packages
       run: |
+        source $HOME/.bashrc && true
         if [ "${{matrix.os}}" == "ubuntu-16.04" ]; then
           EXTRA_BDIST_ARGS="--plat-name manylinux1_x86_64"
         fi
