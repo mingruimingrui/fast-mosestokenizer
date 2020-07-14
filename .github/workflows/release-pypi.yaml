@@ -38,7 +38,7 @@ jobs:
         CC: clang
         CXX: clang++
 
-    - name: Build packages
+    - name: Build and upload packages
       run: |
         eval "$(conda shell.bash hook)"
         if [ "${{matrix.os}}" == "ubuntu-16.04" ]; then
@@ -50,14 +50,9 @@ jobs:
           python setup.py build_ext bdist_wheel $EXTRA_BDIST_ARGS
           conda deactivate
         done
-      env:
-        CC: clang
-        CXX: clang++
-
-    - name: Upload packages
-      run: |
+        conda activate py3.8
         python -m pip install setuptools wheel twine
         python -m twine upload dist/*
       env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        CC: clang
+        CXX: clang++
