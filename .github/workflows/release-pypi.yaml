@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Download and install miniconda
+    - name: Download and install miniconda (OSX)
       if: matrix.os == 'macos-10.15'
       shell: bash
       run: |
@@ -28,6 +28,10 @@ jobs:
         echo "::add-path::$HOME/miniconda3/bin"
         echo "::add-path::$HOME/miniconda3/Scripts"
         conda init
+
+    - name: Init conda environment (Linux)
+      if: matrix.os == 'ubuntu-16.04'
+      run: conda init
 
     - name: Download and build dependencies
       run: |
