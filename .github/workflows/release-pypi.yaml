@@ -5,7 +5,7 @@ on:
     tags:
       - v*
     push:
-      - feature/**
+      - feature/static-python
 
 jobs:
   release-pypi:
