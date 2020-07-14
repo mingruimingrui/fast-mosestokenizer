@@ -56,3 +56,5 @@ jobs:
       env:
         CC: clang
         CXX: clang++
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
