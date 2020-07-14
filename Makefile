@@ -7,12 +7,8 @@ help:
 	@echo "	Build the mosestokenizer c library"
 	@echo "- clean"
 	@echo "	Remove all build files"
-	@echo "- download-pybind11"
-	@echo "	Download and decompress pybind11"
-	@echo "- apt-install-deps"
-	@echo "	Use APT to install dependencies (for convenience during CI/CD)"
-	@echo "- brew-install-deps"
-	@echo "	Use Homebrew to install dependencies (for convenience during CI/CD)"
+	@echo "- download-build-static-deps"
+	@echo "	Download and build static dependencies"
 
 build-cli:
 	mkdir -p build/rel
@@ -32,19 +28,36 @@ install:
 clean:
 	rm -rf build bindings/python/mosestokenizer/lib
 
-download-pybind11:
-	mkdir -p deps
+download-build-static-deps:
+	@mkdir -p deps
+
+	@echo "Downloading pybind"
 	curl -L -o deps/pybind-v2.5.0.tar.gz \
 		https://github.com/pybind/pybind11/archive/v2.5.0.tar.gz
 	tar -C deps -xvf deps/pybind-v2.5.0.tar.gz
 
-apt-install-deps:
-	apt update
-	DEBIAN_FRONTEND=noninteractive apt install -y \
-		libboost-thread-dev \
-		libboost-program-options-dev \
-		libglib2.0-dev \
-		libre2-dev
+	@echo "Downloading and building re2"
+	curl -L -o deps/re2-2020-06-01.tar.gz \
+		https://github.com/google/re2/archive/2020-06-01.tar.gz
+	tar -C deps -xvf deps/re2-2020-06-01.tar.gz
+	cd deps/re2-2020-06-01; CXXFLAGS="-fPIC" make
 
-brew-install-deps:
-	brew install pkg-config boost glib re2
+	@echo "Downloading and building glib2"
+	curl -L -o deps/glib-2.63.6.tar.gz \
+		https://github.com/GNOME/glib/archive/2.63.6.tar.gz
+	tar -C deps -xvf deps/glib-2.63.6.tar.gz
+	( \
+		cd deps/glib-2.63.6; \
+		meson build --default-library static; \
+		ninja -C build; \
+	)
+
+	@echo "Downloading and building boost"
+	curl -L -o deps/boost_1_73_0.tar.gz \
+		https://dl.bintray.com/boostorg/release/1.73.0/source/boost_1_73_0.tar.gz
+	tar -C deps -xvf deps/boost_1_73_0.tar.gz
+	( \
+		cd deps/boost_1_73_0; \
+		./bootstrap.sh --with-libraries=thread,program_options --without-icu; \
+		./b2 -j8 link=static cxxflags=-fPIC; \
+	)
