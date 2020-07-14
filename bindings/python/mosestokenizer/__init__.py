@@ -1,46 +1,16 @@
 import os
-import platform
-from glob import glob
-from ctypes import cdll
 from typing import List
 
 __all__ = ['MosesTokenizer']
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _TOKENIZER_LIB_DIR = os.path.join(_THIS_DIR, 'lib')
-_REQUIRED_LIBS = [
-    'glib-2.0',
-    'stdc++',
-    're2',
-    'boost_atomic',
-    'boost_system',
-    'boost_date_time',
-    'boost_chrono',
-    'boost_thread',
-    'boost_program_options',
-    'mosestokenizer-dev',
-]
 
 # Set default TOKENIZER_SHARED_DIR if not set
 os.environ['TOKENIZER_SHARED_DIR'] = os.environ.get(
     'TOKENIZER_SHARED_DIR',
     os.path.join(_THIS_DIR, 'share')
 )
-
-# Manually load cached dynamic libraries before loading mosestokenizer
-for _lib in _REQUIRED_LIBS:
-    if platform.system() == 'Darwin':
-        _wildcard = 'lib{}*.dylib'.format(_lib)
-    else:
-        _wildcard = 'lib{}.so*'.format(_lib)
-
-    for _fp in glob(os.path.join(_TOKENIZER_LIB_DIR, _wildcard)):
-        try:
-            cdll.LoadLibrary(_fp)
-        except OSError:
-            # Random note: ubuntu-16.04 won't be able to import glib-2.0
-            # but it's okay
-            pass
 
 try:
     from mosestokenizer.lib import _mosestokenizer

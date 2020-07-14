@@ -62,7 +62,7 @@ class CMakeBuild(build_ext):
             'cmake', ext.sourcedir,
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DPYTHON_EXECUTABLE=' + sys.executable,
-            '-DBUILD_SHARED_LIBS:BOOL=ON',
+            '-DBUILD_SHARED_LIBS:BOOL=OFF',
             '-DBUILD_CLI:BOOL=OFF',
             '-DBUILD_PYTHON:BOOL=ON',
         ]
@@ -98,34 +98,6 @@ with open('README.md', 'r', encoding='utf-8') as f:
     LONG_DESCRIPTION = f.read()
 
 
-# Copy dynamically linked libraries
-os.makedirs(os.path.join(TOKENIZER_DIR, 'lib'), exist_ok=True)
-for lib in [
-    'glib-2.0',
-    'stdc++',
-    're2',
-    'boost_atomic',
-    'boost_system',
-    'boost_date_time',
-    'boost_chrono',
-    'boost_thread',
-    'boost_program_options',
-]:
-    if platform.system() == 'Darwin':
-        libpaths = glob('/usr/local/lib/lib{}*.dylib'.format(lib))
-        if lib == 'stdc++':
-            libpaths = glob('/usr/lib/lib{}*.dylib'.format(lib))
-    else:
-        libpaths = glob('/usr/lib/x86_64-linux-gnu/lib{}.so*'.format(lib))
-
-    for fp in libpaths:
-        fn = os.path.basename(fp)
-        dst_path = os.path.join(TOKENIZER_LIB_DIR, fn)
-        if os.path.isfile(dst_path):
-            os.remove(dst_path)
-        shutil.copy(fp, dst_path)
-
-
 setup(
     name='fast-mosestokenizer',
     version=VERSION_INFO,
@@ -136,7 +108,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/mingruimingrui/fast-mosestokenizer',
 
-    packages=['mosestokenizer', 'mosestokenizer.lib'],
+    packages=['mosestokenizer'],
     package_dir={'mosestokenizer': 'bindings/python/mosestokenizer'},
     package_data={'mosestokenizer': [
         'share/*/*',
