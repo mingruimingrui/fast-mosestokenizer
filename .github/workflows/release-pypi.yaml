@@ -13,8 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # os: ['ubuntu-20.04', 'macos-10.15']
-        os: ['macos-10.15']
+        os: ['ubuntu-20.04', 'macos-10.15']
 
     steps:
     - uses: actions/checkout@v2
@@ -32,31 +31,34 @@ jobs:
 
     - name: Download and build dependencies
       run: |
-        conda config --add pkgs_dirs $HOME/.conda/pkgs
         conda create -n meson python=3.8
+        conda activate meson
         conda install -y meson
         make download-build-static-deps
+        conda deactivate
+      env:
+        CC: clang
+        CXX: clang++
 
-    # - name: Build python wheel (Linux)
-    #   if: matrix.os == 'ubuntu-20.04'
+    - name: Build and upload packages
+      run: |
+        if [ ${{matrix.os}} == 'ubuntu-20.04' ]; then
+          EXTRA_BDIST_ARGS="--plat-name manylinux1_x86_64"
+        fi
+        for VERSION in 3.6; do
+          conda create -n py$VERSION python=$VERSION
+          conda activate py$VERSION
+          python setup.py build_ext bdist_wheel $EXTRA_BDIST_ARGS
+          conda deactivate
+        done
+      env:
+        CC: clang
+        CXX: clang++
+
+    # - name: Upload packages
     #   run: |
     #     python -m pip install setuptools wheel twine
-    #     python setup.py build_ext bdist_wheel --plat-name manylinux1_x86_64
-    #   env:
-    #     CC: clang
-    #     CXX: clang++
-
-    # - name: Build python wheel (OSX)
-    #   if: matrix.os == 'macos-10.15'
-    #   run: |
-    #     python -m pip install setuptools wheel twine
-    #     python setup.py build_ext bdist_wheel
-    #   env:
-    #     CC: clang
-    #     CXX: clang++
-
-    # - name: Upload to PyPI
-    #   run: python -m twine upload dist/*
+    #     python -m twine upload dist/*
     #   env:
     #     TWINE_USERNAME: __token__
     #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
