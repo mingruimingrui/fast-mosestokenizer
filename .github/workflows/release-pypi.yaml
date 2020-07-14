@@ -4,7 +4,8 @@ on:
   create:
     tags:
       - v*
-    push:
+  push:
+    branches:
       - master
 
 jobs:
