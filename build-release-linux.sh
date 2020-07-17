@@ -36,7 +36,7 @@ for VERSION in 3.6 3.7 3.8; do
     conda deactivate
 done
 
-# # Upload to PyPI
-# conda activate py3.8
-# python -m pip install setuptools wheel twine
-# python -m twine upload dist/*
+# Upload to PyPI
+conda activate py3.8
+python -m pip install setuptools wheel twine
+python -m twine upload dist/*
