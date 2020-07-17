@@ -19,5 +19,4 @@ jobs:
       run: docker run --rm -i -t -v $PWD:/opt/fast-mosestokenizer \
         -e TWINE_USERNAME=__token__ \
         -e TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} \
-        continuumio/miniconda3:4.8.2 \
-        /bin/bash /opt/fast-mosestokenizer/build-release-linux.sh
+        ubuntu:16.04 /bin/bash /opt/fast-mosestokenizer/build-release-linux.sh
