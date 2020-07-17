@@ -1723,6 +1723,7 @@ Tokenizer::detokenize(const std::string& buf)
 
 
     std::string text(oss.str());
+    RE2::GlobalReplace(&text,"\\s?@-@\\s?","-");
     RE2::GlobalReplace(&text," +",SPC_BYTE);
     RE2::GlobalReplace(&text,"\n ","\n");
     RE2::GlobalReplace(&text," \n","\n");
