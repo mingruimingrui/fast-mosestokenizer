@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Optional
 
 __all__ = ['MosesTokenizer']
 
@@ -48,6 +48,7 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
         supersub: bool = False,
         penn: bool = False,
         verbose: bool = False,
+        user_dir: Optional[str] = None,
     ):
         """
         Args:
@@ -67,6 +68,8 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
                 subscript conjoining. Defaults to False.
             penn (bool, optional): Use PENN tokenizer. Defaults to False.
             verbose (bool, optional): Print messages. Defaults to False.
+            verbose (Optional[str], optional): User provided nonbreaking
+                prefixes and protected patterns. Defaults to None.
         """
         params = _mosestokenizer.MosesTokenizerParameters()
 
@@ -110,6 +113,11 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
         params.chunksize = 1
 
         super().__init__(params)
+
+        # Load custom protected patterns and prefixes
+        self.init(os.environ['TOKENIZER_SHARED_DIR'])
+        if user_dir is not None:
+            self.init(user_dir)
 
     def tokenize(self, text: str) -> List[str]:
         """Tokenize a raw input text based on linguistic rules.
