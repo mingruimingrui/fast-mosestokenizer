@@ -12,7 +12,7 @@ eval "$(conda shell.bash hook)"
 # Download dependencies
 apt update
 apt upgrade -y
-apt install -y clang make cmake meson git curl
+apt install -y clang make cmake meson git curl pkg-config
 
 # Build dependencies as static libraries
 make download-build-static-deps
