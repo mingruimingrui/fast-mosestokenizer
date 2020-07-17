@@ -1,0 +1,53 @@
+name: Build and upload OSX python packages
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  release-pypi:
+    runs-on: macos-10.15
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download and install miniconda
+      shell: bash
+      run: |
+        MINICONDA_FILENAME=Miniconda3-latest-MacOSX-x86_64.sh
+        curl -L -o $MINICONDA_FILENAME "https://repo.continuum.io/miniconda/$MINICONDA_FILENAME"
+        bash ${MINICONDA_FILENAME} -b -f -p $HOME/miniconda3
+        echo "::add-path::$HOME/miniconda3/bin"
+        echo "::add-path::$HOME/miniconda3/Scripts"
+        conda init
+
+    - name: Download and build dependencies
+      run: |
+        eval "$(conda shell.bash hook)"
+        conda create -n meson python=3.8
+        conda activate meson
+        conda install -y meson
+        make download-build-static-deps
+        conda deactivate
+      env:
+        CC: clang
+        CXX: clang++
+
+    - name: Build and upload packages
+      run: |
+        eval "$(conda shell.bash hook)"
+        for VERSION in 3.6 3.7 3.8; do
+          conda create -n py$VERSION python=$VERSION
+          conda activate py$VERSION
+          python setup.py build_ext bdist_wheel
+          conda deactivate
+        done
+        conda activate py3.8
+        python -m pip install setuptools wheel twine
+        python -m twine upload dist/*
+      env:
+        CC: clang
+        CXX: clang++
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}

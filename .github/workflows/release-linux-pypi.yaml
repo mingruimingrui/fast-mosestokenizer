@@ -1,0 +1,23 @@
+name: Build and upload linux x86_64 python packages
+
+on:
+  create:
+    tags:
+      - v*
+  push:
+    branches:
+      - master
+
+jobs:
+  release-pypi:
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build package and upload from docker
+      run: docker run --rm -i -t -v $PWD:/opt/fast-mosestokenizer \
+        -e TWINE_USERNAME=__token__ \
+        -e TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} \
+        continuumio/miniconda3:4.8.2 \
+        /bin/bash /opt/fast-mosestokenizer/build-release-linux.sh
