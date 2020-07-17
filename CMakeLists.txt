@@ -14,6 +14,12 @@ option(BUILD_PYTHON "Build mosestokneizer python library" OFF)
 ######## CMake settings
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_MACOSX_RPATH 1)
+  find_library(COREFOUNDATION_LIBRARY CoreFoundation)
+  find_library(FOUNDATION_LIBRARY Foundation)
+  set(
+    DEP_LIBRARIES ${DEP_LIBRARIES}
+    ${COREFOUNDATION_LIBRARY} ${FOUNDATION_LIBRARY}
+  )
 endif()
 
 set(CMAKE_CXX_STANDARD 11)
@@ -82,10 +88,12 @@ set(DEP_LIBRARIES ${DEP_LIBRARIES} ${Intl_LIBRARIES})
 
 find_package(Glib2 REQUIRED)
 include_directories(${Glib2_INCLUDE_DIRS})
+link_directories(${Glib2_LIBRARY_DIRS})
 set(DEP_LIBRARIES ${DEP_LIBRARIES} ${Glib2_LIBRARIES})
 
 find_package(RE2 REQUIRED)
 include_directories(${RE2_INCLUDE_DIRS})
+link_directories(${RE2_LIBRARY_DIRS})
 set(DEP_LIBRARIES ${DEP_LIBRARIES} ${RE2_LIBRARIES})
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
