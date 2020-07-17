@@ -1,11 +1,7 @@
 import os
-import platform
-import re
-import shutil
-import subprocess
 import sys
-from distutils.version import LooseVersion
-from glob import glob
+import platform
+import subprocess
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
@@ -40,6 +36,9 @@ class CMakeBuild(build_ext):
             raise RuntimeError(_msg)
 
         if platform.system() == "Windows":
+            import re
+            from distutils.version import LooseVersion
+
             cmake_version = re.search(r'version\s*([\d.]+)', out.decode())
             cmake_version = cmake_version.group(1)
             cmake_version = LooseVersion(cmake_version)
@@ -111,6 +110,7 @@ setup(
     packages=['mosestokenizer'],
     package_dir={'mosestokenizer': 'bindings/python/mosestokenizer'},
     package_data={'mosestokenizer': [
+        'share/*',
         'share/*/*',
         'lib/*.so*',
         'lib/*.dylib'
