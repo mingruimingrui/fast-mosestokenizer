@@ -2,12 +2,12 @@
 
 import sys
 import argparse
-from sacremoses import MosesTokenizer
+from sacremoses import MosesTokenizer, MosesDetokenizer
 
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-l', '--lang', type=str, help='Language')
+parser.add_argument('-l', '--lang', type=str, default='en', help='Language')
 parser.add_argument(
     '-a', '--aggressive-dash-splits', action='store_true',
     help='Aggressively split dashes'
@@ -23,6 +23,7 @@ escape = not args.no_escape_xml
 
 
 tokenizer = MosesTokenizer(lang=args.lang)
+detokenizer = MosesDetokenizer(lang=args.lang)
 
 for line in sys.stdin:
     line = tokenizer.tokenize(
@@ -31,4 +32,5 @@ for line in sys.stdin:
         escape=escape,
         return_str=True
     )
+    # sys.stdout.write(detokenizer.detokenize(line.split()) + '\n')
     sys.stdout.write(line + '\n')

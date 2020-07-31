@@ -7,7 +7,7 @@ from mosestokenizer import MosesTokenizer
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-l', '--lang', type=str, help='Language')
+parser.add_argument('-l', '--lang', type=str, default='en', help='Language')
 parser.add_argument(
     '-a', '--aggressive-dash-splits', action='store_true',
     help='Aggressively split dashes'
@@ -27,4 +27,5 @@ tokenizer = MosesTokenizer(
 
 for line in sys.stdin:
     tokens = tokenizer.tokenize(line)
+    # sys.stdout.write(tokenizer.detokenize(tokens) + '\n')
     sys.stdout.write(' '.join(tokens) + '\n')
