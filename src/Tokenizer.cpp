@@ -1019,8 +1019,9 @@ Tokenizer::quik_tokenize(const std::string& buf)
         case G_UNICODE_OTHER_LETTER:
         case G_UNICODE_TITLECASE_LETTER:
             if (in_url_p || in_num_p)
+                // Unsure if this is the proper way to handle these cases.
                 pre_break_p = true;
-                in_num_p = false;  // I actually don't know if this is right
+                in_num_p = false;
             // fallthough
         case G_UNICODE_UPPERCASE_LETTER:
         case G_UNICODE_LOWERCASE_LETTER:
