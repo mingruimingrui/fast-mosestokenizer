@@ -258,11 +258,15 @@ int main(int ac, char **av)
     }
     if (!params.cfg_path) {
         if (!::access("../share/.",X_OK)) {
-            if (!::access("../share/moses/.",X_OK)) {
-                params.cfg_path = "../share/moses";
+            if (!::access("../share/mosestokenizer/.",X_OK)) {
+                params.cfg_path = "../share/mosestokenizer";
             } else {
                 params.cfg_path = "../share";
             }
+        } else if (!::access("/usr/share/mosestokenizer",R_OK)) {
+            params.cfg_path = "/usr/share/mosestokenizer";
+        } else if (!::access("/usr/local/share/mosestokenizer",R_OK)) {
+            params.cfg_path = "/usr/local/share/mosestokenizer";
         } else if (!::access("./scripts/share/.",X_OK)) {
             params.cfg_path = "./scripts/share";
         } else if (!::access("./nonbreaking_prefix.en",R_OK)) {
@@ -274,7 +278,7 @@ int main(int ac, char **av)
                 std::string cfg_shr_str(cfg_dir_str);
                 cfg_shr_str.append("/shared");
                 std::string cfg_mos_str(cfg_shr_str);
-                cfg_mos_str.append("/moses");
+                cfg_mos_str.append("/mosestokenizer");
                 if (!::access(cfg_mos_str.c_str(),X_OK)) {
                     params.cfg_path = strdup(cfg_mos_str.c_str());
                 } else if (!::access(cfg_shr_str.c_str(),X_OK)) {
