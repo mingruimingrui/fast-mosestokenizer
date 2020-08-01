@@ -119,6 +119,21 @@ setup(
     ext_modules=[CMakeExtension(
         'mosestokenizer.lib._mosestokenizer'
     )],
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Programming Language :: C++',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
+        'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Software Development',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Text Processing :: Linguistic',
+    ],
 
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
