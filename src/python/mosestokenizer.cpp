@@ -7,11 +7,12 @@
 #include "mosestokenizer/Parameters.h"
 #include "mosestokenizer/Tokenizer.h"
 
-int add(int i, int j) {
-    return i + j;
-}
-
 namespace py = pybind11;
+
+#ifdef TOKENIZER_NAMESPACE
+using namespace TOKENIZER_NAMESPACE ;
+#endif
+
 
 PYBIND11_MODULE(_mosestokenizer, m) {
     m.doc() = R"pbdoc(
