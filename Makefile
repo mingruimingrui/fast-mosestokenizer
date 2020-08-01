@@ -1,4 +1,4 @@
-.PHONY = help build clean
+.PHONY = help build install clean
 
 help:
 	@echo "Subcommands"
@@ -10,7 +10,7 @@ help:
 	@echo "- download-build-static-deps"
 	@echo "	Download and build static dependencies"
 
-build-cli:
+build:
 	mkdir -p build/rel
 	( \
 		cd build/rel; \
@@ -22,8 +22,7 @@ build-cli:
 	)
 
 install:
-	@echo "Not yet implemented"
-	exit 1
+	cd build/rel && make install
 
 clean:
 	rm -rf build bindings/python/mosestokenizer/lib
@@ -58,6 +57,9 @@ download-build-static-deps:
 	tar -C deps -xf deps/boost_1_73_0.tar.gz
 	( \
 		cd deps/boost_1_73_0; \
-		./bootstrap.sh --with-libraries=thread,program_options --without-icu; \
-		./b2 -j8 link=static cxxflags=-fPIC; \
+		./bootstrap.sh \
+			--with-libraries=thread,program_options \
+			--without-icu \
+			--with-toolset=clang; \
+		./b2 -j8 toolset=clang link=static cxxflags=-fPIC; \
 	)
