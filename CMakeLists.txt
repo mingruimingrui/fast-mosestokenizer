@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.2)
 file(STRINGS "VERSION" MOSESTOKENIZER_VERSION)
 project(mosestokenizer VERSION ${MOSESTOKENIZER_VERSION} LANGUAGES CXX)
 add_definitions(-DVERSION_INFO="${MOSESTOKENIZER_VERSION}")
+add_definitions(-DTOKENIZER_NAMESPACE=mosestokenizer)
 
 
 ######## Options
@@ -21,6 +22,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     ${COREFOUNDATION_LIBRARY} ${FOUNDATION_LIBRARY}
   )
 endif()
+set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -104,6 +106,28 @@ add_definitions(-std=c++11 -pthread)
 add_library(mosestokenizer-dev src/Tokenizer.cpp src/Parameters.cpp)
 target_link_libraries(mosestokenizer-dev PRIVATE ${DEP_LIBRARIES})
 
+configure_file(
+  mosestokenizer.pc.in
+  mosestokenizer.pc
+  @ONLY
+)
+
+install(
+  FILES ${CMAKE_BINARY_DIR}/mosestokenizer.pc
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
+)
+
+install(
+  DIRECTORY ${CMAKE_SOURCE_DIR}/share/nonbreaking_prefixes
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/share/mosestokenizer
+)
+
+install(
+  TARGETS mosestokenizer-dev
+  LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+)
+
 
 ######## CLI
 if (BUILD_CLI)
@@ -113,6 +137,11 @@ target_link_libraries(
   mosestokenizer PRIVATE
   mosestokenizer-dev
   ${DEP_LIBRARIES}
+)
+
+install(
+  TARGETS mosestokenizer
+  RUNTIME DESTINATION bin
 )
 
 endif()
@@ -130,3 +159,6 @@ target_link_libraries(
 )
 
 endif()
+
+
+######## Installation
