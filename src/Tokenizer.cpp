@@ -27,6 +27,7 @@ RE2 qx_x("([?!])"); // one qm/em mark
 RE2 braces_x("([\\]\\[\\(\\){}<>])"); // any open or close of a pair
 RE2 endq_x("([^'])' "); // post-token single-quote or doubled single-quote
 RE2 letter_x("\\p{L}"); // a letter
+RE2 other_letters_x("(\\p{Lo}+)"); // other letters
 RE2 lower_x("^\\p{Ll}"); // a lower-case letter
 RE2 sinteger_x("^\\p{N}"); // not a digit mark
 RE2 numprefixed_x("[-+/.@\\\\#\\%&\\p{Sc}\\p{N}]*[\\p{N}]+-[-'`\"\\p{L}]*\\p{L}");
@@ -448,9 +449,10 @@ Tokenizer::Tokenizer(const Parameters& _)
     : nthreads(_.nthreads ? _.nthreads : 1)
     , chunksize(_.chunksize)
     , lang_iso(_.lang_iso)
-    , english_p(_.lang_iso.compare("en")==0)
-    , latin_p((!english_p) && (_.lang_iso.compare("fr")==0 || _.lang_iso.compare("it")==0))
+    , latin_p(_.lang_iso.compare("fr")==0 || _.lang_iso.compare("it")==0)
     , swedish_p(_.lang_iso.compare("fi")==0 || _.lang_iso.compare("sv")==0)
+    // , english_p(_.lang_iso.compare("en")==0)
+    , english_p(!latin_p && !swedish_p)
     , skip_xml_p(_.detag_p)
     , skip_alltags_p(_.alltag_p)
     , entities_p(_.entities_p)
@@ -947,6 +949,9 @@ Tokenizer::quik_tokenize(const std::string& buf)
             }
         }
     }
+
+    // Perform some pre-tokenization
+    RE2::GlobalReplace(&text,other_letters_x," \\1 ");
 
     const char *pt(text.c_str());
     const char *ep(pt + text.size());
@@ -1797,7 +1802,7 @@ Tokenizer::splitter(const std::string &istr, bool *continuation_ptr) {
     std::size_t seqpos = 0;
 
     GUnicodeType curr_type = G_UNICODE_UNASSIGNED;
-    //bool prev_word_p = false;
+    // bool prev_word_p = false;
     bool curr_word_p = false;
 
     std::vector<std::size_t> breaks;
@@ -1807,7 +1812,7 @@ Tokenizer::splitter(const std::string &istr, bool *continuation_ptr) {
         currwc = wchar_t(ucs4[icp]);
         curr_type = g_unichar_type(currwc);
         prev_class = curr_class;
-        //prev_word_p = curr_word_p;
+        // prev_word_p = curr_word_p;
 
         switch (curr_type) {
         case G_UNICODE_DECIMAL_NUMBER:
