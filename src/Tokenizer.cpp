@@ -27,7 +27,7 @@ RE2 qx_x("([?!])"); // one qm/em mark
 RE2 braces_x("([\\]\\[\\(\\){}<>])"); // any open or close of a pair
 RE2 endq_x("([^'])' "); // post-token single-quote or doubled single-quote
 RE2 letter_x("\\p{L}"); // a letter
-RE2 other_letters_x("([\\p{Lo}\\p{Cn}\\p{Cf}]+)"); // other letters
+RE2 other_letters_x("((?:\\p{Lo}\\p{Mn})+)"); // other letters
 RE2 lower_x("^\\p{Ll}"); // a lower-case letter
 RE2 sinteger_x("^\\p{N}"); // not a digit mark
 RE2 numprefixed_x("[-+/.@\\\\#\\%&\\p{Sc}\\p{N}]*[\\p{N}]+-[-'`\"\\p{L}]*\\p{L}");
