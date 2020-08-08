@@ -25,6 +25,7 @@ usage(const char *path)
     std::cerr << " -e -- do not escape entities during tokenization" << std::endl;
     std::cerr << " -E -- preserve entities during tokenization" << std::endl;
     std::cerr << " -k -- narrow kana" << std::endl;
+    std::cerr << " -L -- segment other letters" << std::endl;
     std::cerr << " -n -- narrow latin" << std::endl;
     std::cerr << " -N -- normalize" << std::endl;
     std::cerr << " -o OUT -- output file path" << std::endl;
@@ -174,6 +175,9 @@ int main(int ac, char **av)
                 exit(0);
             case 'k':
                 params.narrow_kana_p = true;
+                break;
+            case 'L':
+                params.other_letters_p = true;
                 break;
             case 'n':
                 params.narrow_latin_p = true;

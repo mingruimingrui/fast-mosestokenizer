@@ -1027,7 +1027,6 @@ Tokenizer::quik_tokenize(const std::string& buf)
         case G_UNICODE_OTHER_LETTER:
         case G_UNICODE_TITLECASE_LETTER:
             if (in_url_p || in_num_p) {
-                // Unsure if this is the proper way to handle these cases.
                 pre_break_p = true;
                 in_num_p = false;
             };
@@ -1065,6 +1064,7 @@ Tokenizer::quik_tokenize(const std::string& buf)
             break;
             // Random note: Why? because connectors do not contain useful
             // linguistic information
+
             // if (curr_uch != gunichar(L'_')) {
             //     if (in_url_p) {
             //         in_url_p = false;
