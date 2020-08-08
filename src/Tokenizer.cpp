@@ -459,6 +459,7 @@ Tokenizer::Tokenizer(const Parameters& _)
     , escape_p(_.escape_p)
     , unescape_p(_.unescape_p)
     , aggressive_hyphen_p(_.aggro_p)
+    , other_letters_p(_.other_letters_p)
     , supersub_p(_.supersub_p)
     , url_p(_.url_p)
     , downcase_p(_.downcase_p)
@@ -951,7 +952,9 @@ Tokenizer::quik_tokenize(const std::string& buf)
     }
 
     // Perform some pre-tokenization
-    RE2::GlobalReplace(&text,other_letters_x," \\1 ");
+    if (other_letters_p) {
+        RE2::GlobalReplace(&text,other_letters_x," \\1 ");
+    };
 
     const char *pt(text.c_str());
     const char *ep(pt + text.size());
@@ -1023,10 +1026,11 @@ Tokenizer::quik_tokenize(const std::string& buf)
         case G_UNICODE_MODIFIER_LETTER:
         case G_UNICODE_OTHER_LETTER:
         case G_UNICODE_TITLECASE_LETTER:
-            if (in_url_p || in_num_p)
+            if (in_url_p || in_num_p) {
                 // Unsure if this is the proper way to handle these cases.
                 pre_break_p = true;
                 in_num_p = false;
+            };
             // fallthough
         case G_UNICODE_UPPERCASE_LETTER:
         case G_UNICODE_LOWERCASE_LETTER:

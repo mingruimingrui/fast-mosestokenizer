@@ -23,6 +23,7 @@ struct Parameters
     bool entities_p;
     bool escape_p;
     bool aggro_p;
+    bool other_letters_p;
     bool supersub_p;
     bool url_p;
     bool downcase_p;

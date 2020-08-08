@@ -74,6 +74,7 @@ protected:
     bool escape_p;
     bool unescape_p;
     bool aggressive_hyphen_p;
+    bool other_letters_p;
     bool supersub_p;
     bool url_p;
     bool downcase_p;
