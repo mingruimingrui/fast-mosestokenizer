@@ -43,6 +43,7 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
         escape_xml: bool = False,
         unescape_xml: bool = False,
         preserve_xml_entities: bool = False,
+        other_letters_p: bool = False,
         refined_punct_splits: bool = False,
         url_handling: bool = True,
         supersub: bool = False,
@@ -82,6 +83,7 @@ class MosesTokenizer(_mosestokenizer.MosesTokenizer):
         params.escape_p = escape_xml
         params.unescape_p = unescape_xml
         params.entities_p = preserve_xml_entities
+        params.other_letters_p = other_letters_p
         params.refined_p = refined_punct_splits
         params.url_p = url_handling
         params.supersub_p = supersub  # Numeric super and subscript conjoining

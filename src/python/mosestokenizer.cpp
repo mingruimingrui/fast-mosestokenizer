@@ -34,6 +34,7 @@ PYBIND11_MODULE(_mosestokenizer, m) {
         .def_readwrite("entities_p", &Parameters::entities_p)
         .def_readwrite("escape_p", &Parameters::escape_p)
         .def_readwrite("aggro_p", &Parameters::aggro_p)
+        .def_readwrite("other_letters_p", &Parameters::other_letters_p)
         .def_readwrite("supersub_p", &Parameters::supersub_p)
         .def_readwrite("url_p", &Parameters::url_p)
         .def_readwrite("downcase_p", &Parameters::downcase_p)
