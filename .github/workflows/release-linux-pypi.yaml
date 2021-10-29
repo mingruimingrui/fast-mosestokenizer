@@ -1,9 +1,7 @@
 name: Build and upload linux x86_64 python packages
 
 on:
-  create:
-    tags:
-      - v*
+  workflow_dispatch
 
 jobs:
   release-pypi:
