@@ -53,7 +53,7 @@ download-build-static-deps:
 
 	@echo "Downloading and building boost"
 	curl -L -o deps/boost_1_73_0.tar.gz \
-		https://dl.bintray.com/boostorg/release/1.73.0/source/boost_1_73_0.tar.gz
+		https://boostorg.jfrog.io/artifactory/main/release/1.73.0/source/boost_1_73_0.tar.gz
 	tar -C deps -xf deps/boost_1_73_0.tar.gz
 	( \
 		cd deps/boost_1_73_0; \
