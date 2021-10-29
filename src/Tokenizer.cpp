@@ -407,8 +407,8 @@ trim(const std::string& in)
 {
     std::size_t start = 0;
     std::size_t limit = in.size();
-    while (start < limit && in.at(start) < '!') ++start;
-    while (start < limit && in.at(limit-1) < '!') --limit;
+    while (start < limit && in.at(start) == ' ') ++start;
+    while (start < limit && in.at(limit-1) == ' ') --limit;
     if (start == limit) return std::string("");
     if (start > 0 || limit < in.size())
         return in.substr(start,limit-start);
@@ -1694,7 +1694,7 @@ Tokenizer::detokenize(const std::string& buf)
                    && RE2::FullMatch(words[iword-1],pre_en_x)) {
             oss << word;
             prepends = SPC_BYTE;
-        } else if (latin_p && iword < nwords - 2
+        } else if (latin_p && (iword + 1 < nwords)
                    && RE2::FullMatch(word,curr_fr_x)
                    && RE2::FullMatch(words[iword+1],post_fr_x)) {
             oss << prepends << word;
