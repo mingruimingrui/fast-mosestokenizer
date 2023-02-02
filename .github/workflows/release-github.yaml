@@ -13,7 +13,7 @@ jobs:
       CXX: clang++
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Download and install miniconda
       shell: bash
@@ -43,7 +43,7 @@ jobs:
           conda deactivate
         done
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: macos-wheels
         path: dist/*.whl
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 
     - name: Build package and upload from docker
       run: |
@@ -62,7 +62,7 @@ jobs:
           -e TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }} \
           ubuntu:16.04 /bin/bash /opt/fast-mosestokenizer/build-release-linux.sh
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: linux-wheels
         path: dist/*.whl
@@ -76,12 +76,12 @@ jobs:
       - build-wheels-linux
 
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: linux-wheels
           path: dist
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: macos-wheels
           path: dist
