@@ -36,8 +36,3 @@ for VERSION in 3.6 3.7 3.8 3.9 3.10; do
         --plat-name manylinux1_x86_64
     conda deactivate
 done
-
-# Upload to PyPI
-conda activate py3.6
-python -m pip install setuptools wheel twine
-python -m twine upload dist/*
