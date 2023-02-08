@@ -150,7 +150,12 @@ endif()
 ######## Python
 if (BUILD_PYTHON)
 
-add_subdirectory(deps/pybind11-2.5.0)
+if (BUILD_SHARED_LIBS)
+  find_package(pybind11 REQUIRED)
+else()
+  add_subdirectory(deps/pybind11-2.5.0)
+endif()
+
 pybind11_add_module(_mosestokenizer src/python/mosestokenizer.cpp)
 target_link_libraries(
   _mosestokenizer PRIVATE

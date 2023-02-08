@@ -61,7 +61,7 @@ class CMakeBuild(build_ext):
             'cmake', ext.sourcedir,
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DPYTHON_EXECUTABLE=' + sys.executable,
-            '-DBUILD_SHARED_LIBS:BOOL=OFF',
+            '-DBUILD_SHARED_LIBS:BOOL=ON',
             '-DBUILD_CLI:BOOL=OFF',
             '-DBUILD_PYTHON:BOOL=ON',
         ]
