@@ -32,7 +32,7 @@ make build-cli
 ### From PyPI (Recommended for users)
 
 ```sh
-pip install fast-mosestokenizer
+pip install opus-fast-mosestokenizer
 ```
 
 ### From source

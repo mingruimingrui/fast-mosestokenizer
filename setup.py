@@ -105,14 +105,13 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 
 setup(
-    name='fast-mosestokenizer',
+    name='opus-fast-mosestokenizer',
     version=VERSION_INFO,
     author='Wang Ming Rui',
-    author_email='mingruimingrui@hotmail.com',
     description='c++ mosestokenizer',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
-    url='https://github.com/mingruimingrui/fast-mosestokenizer',
+    url='https://github.com/Helsinki-NLP/opus-fast-mosestokenizer',
     python_requires='>=3.6',
 
     packages=['mosestokenizer'],

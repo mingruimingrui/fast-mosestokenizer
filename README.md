@@ -1,3 +1,5 @@
+**opus-fast-mosestokenizer** is a fork of [fast-mosestokenizer](https://github.com/mingruimingrui/fast-mosestokenizer)
+created to ensure compability of the package with current Python environments.
 
 **fast-mosestokenizer** is a C++ implementation of the moses tokenizer
 which is a favourite among the folks in NLP research.
