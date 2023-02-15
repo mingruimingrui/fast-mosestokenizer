@@ -7,6 +7,10 @@ from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 
+# set environment variable STATIC_LIBS=1 to force static libs
+ENV_STATIC_LIBS = 'STATIC_LIBS'
+
+
 class CMakeExtension(Extension):
     """CMake python extension class.
 
@@ -61,10 +65,13 @@ class CMakeBuild(build_ext):
             'cmake', ext.sourcedir,
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
             '-DPYTHON_EXECUTABLE=' + sys.executable,
-            '-DBUILD_SHARED_LIBS:BOOL=ON',
             '-DBUILD_CLI:BOOL=OFF',
             '-DBUILD_PYTHON:BOOL=ON',
         ]
+        if os.environ.get(ENV_STATIC_LIBS, None):
+            cmake_args.append('-DBUILD_SHARED_LIBS:BOOL=OFF')
+        else:
+            cmake_args.append('-DBUILD_SHARED_LIBS:BOOL=ON')
         build_args = [
             'cmake', '--build', '.',
             '--config', cfg
