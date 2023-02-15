@@ -1,0 +1,5 @@
+global-include CMakeLists.txt VERSION mosestokenizer.pc.in
+graft cmake
+graft include
+graft share
+graft src
