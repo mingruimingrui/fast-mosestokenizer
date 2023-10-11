@@ -29,7 +29,7 @@ make download-build-static-deps
 conda deactivate
 
 # Build and upload packages
-for VERSION in 3.6 3.7 3.8 3.9 3.10; do
+for VERSION in 3.6 3.7 3.8 3.9 3.10 3.11; do
     conda create -n py$VERSION -y python=$VERSION
     conda activate py$VERSION
     STATIC_LIBS=1 python setup.py build_ext bdist_wheel \

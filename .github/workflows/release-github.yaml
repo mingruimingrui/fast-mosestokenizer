@@ -56,7 +56,7 @@ jobs:
     - name: Build and upload packages
       run: |
         eval "$(conda shell.bash hook)"
-        for VERSION in 3.6 3.7 3.8 3.9 3.10; do
+        for VERSION in 3.6 3.7 3.8 3.9 3.10 3.11; do
           conda create -n py$VERSION python=$VERSION
           conda activate py$VERSION
           STATIC_LIBS=1 python setup.py build_ext bdist_wheel
