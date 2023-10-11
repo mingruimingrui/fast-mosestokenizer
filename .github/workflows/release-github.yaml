@@ -24,7 +24,7 @@ jobs:
         path: dist/*.tar.gz
 
   build-wheels-macos:
-    runs-on: macos-10.15
+    runs-on: macos-12
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
       MINICONDA_FILENAME: Miniconda3-latest-MacOSX-x86_64.sh
@@ -49,6 +49,7 @@ jobs:
         conda create -n meson python=3.8
         conda activate meson
         conda install -y meson
+        brew install pcre
         make download-build-static-deps
         conda deactivate
 

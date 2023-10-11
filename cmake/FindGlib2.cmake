@@ -30,11 +30,11 @@ else()  # BUILD_SHARED_LIBS
 # Search for static library from deps
 set(
   Glib2_INCLUDE_DIRS
-  ${CMAKE_SOURCE_DIR}/deps/glib-2.63.6
-  ${CMAKE_SOURCE_DIR}/deps/glib-2.63.6/glib
-  ${CMAKE_SOURCE_DIR}/deps/glib-2.63.6/build/glib
+  ${CMAKE_SOURCE_DIR}/deps/glib-2.72.4
+  ${CMAKE_SOURCE_DIR}/deps/glib-2.72.4/glib
+  ${CMAKE_SOURCE_DIR}/deps/glib-2.72.4/build/glib
 )
-set(Glib2_LIBRARIES ${CMAKE_SOURCE_DIR}/deps/glib-2.63.6/build/glib/libglib-2.0.a)
+set(Glib2_LIBRARIES ${CMAKE_SOURCE_DIR}/deps/glib-2.72.4/build/glib/libglib-2.0.a)
 add_library(glib-2.0::glib-2.0 STATIC IMPORTED)
 set(Glib2_FOUND ON)
 

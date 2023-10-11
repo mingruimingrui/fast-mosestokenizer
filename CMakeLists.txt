@@ -153,7 +153,7 @@ if (BUILD_PYTHON)
 if (BUILD_SHARED_LIBS)
   find_package(pybind11 REQUIRED)
 else()
-  add_subdirectory(deps/pybind11-2.5.0)
+  add_subdirectory(deps/pybind11-2.10.3)
 endif()
 
 pybind11_add_module(_mosestokenizer src/python/mosestokenizer.cpp)

@@ -652,7 +652,7 @@ Tokenizer::protected_tokenize(std::string& text) {
         // suppress break if it is an non-breaking prefix
         if (sentence_break_p) {
             re2::StringPiece pfx(words[ii].substr(0,len-1));
-            std::string pfxs(pfx.as_string());
+            std::string pfxs(pfx);
             if (nbpre_gen_set.find(pfxs) != nbpre_gen_set.end()) {
                 // general non-breaking prefix
                 sentence_break_p = false;

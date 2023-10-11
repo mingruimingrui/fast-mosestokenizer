@@ -31,9 +31,9 @@ download-build-static-deps:
 	@mkdir -p deps
 
 	@echo "Downloading pybind"
-	curl -L -o deps/pybind-v2.5.0.tar.gz \
-		https://github.com/pybind/pybind11/archive/v2.5.0.tar.gz
-	tar -C deps -xf deps/pybind-v2.5.0.tar.gz
+	curl -L -o deps/pybind-v2.10.3.tar.gz \
+		https://github.com/pybind/pybind11/archive/v2.10.3.tar.gz
+	tar -C deps -xf deps/pybind-v2.10.3.tar.gz
 
 	@echo "Downloading and building re2"
 	curl -L -o deps/re2-2020-06-01.tar.gz \
@@ -42,11 +42,11 @@ download-build-static-deps:
 	cd deps/re2-2020-06-01; CXXFLAGS="-fPIC" make
 
 	@echo "Downloading and building glib2"
-	curl -L -o deps/glib-2.63.6.tar.gz \
-		https://github.com/GNOME/glib/archive/2.63.6.tar.gz
-	tar -C deps -xf deps/glib-2.63.6.tar.gz
+	curl -L -o deps/glib-2.72.4.tar.xz \
+		https://download.gnome.org/sources/glib/2.72/glib-2.72.4.tar.xz
+	tar -C deps -xf deps/glib-2.72.4.tar.xz
 	( \
-		cd deps/glib-2.63.6; \
+		cd deps/glib-2.72.4; \
 		meson build --default-library static; \
 		ninja -C build; \
 	)
