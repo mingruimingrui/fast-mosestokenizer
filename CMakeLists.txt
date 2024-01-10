@@ -49,7 +49,7 @@ set(
 
 ######## Compiler flags
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  add_definitions(-std=c++11 -Wall)
+  add_definitions(-std=c++17 -Wall)
   if (CMAKE_BUILD_TYPE MATCHES Debug)
     add_definitions(-O0 -g3)
   endif ()
@@ -99,7 +99,7 @@ link_directories(${RE2_LIBRARY_DIRS})
 set(DEP_LIBRARIES ${DEP_LIBRARIES} ${RE2_LIBRARIES})
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
-add_definitions(-std=c++11 -pthread)
+add_definitions(-std=c++17 -pthread)
 
 
 ######## Targets
